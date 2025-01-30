@@ -16,6 +16,8 @@ import { editGoalRoute } from "./routes/edit-goal";
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { authenticateFromGithub } from "./routes/authenticate-from-github";
+import fastifyJwt from "@fastify/jwt";
+import { env } from "env";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 const port: number = 3333;
@@ -25,6 +27,10 @@ app.setSerializerCompiler(serializerCompiler);
 
 app.register(fastifyCors, {
   origin: "*",
+});
+
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
 });
 
 app.register(fastifySwagger, {

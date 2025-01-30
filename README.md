@@ -47,6 +47,8 @@ API - Node | Fastify | Docker | PostgreSQL
 
 - [jose](https://www.npmjs.com/package/jose): biblioteca JavaScript/TypeScript moderna e segura para trabalhar com JWTs (JSON Web Tokens), oferecendo funcionalidades como criação, assinatura, verificação e decodificação de tokens JWT de forma simples e eficiente.
 
+- [@fastify/jwt](https://github.com/fastify/fastify-jwt): Utiliátio JWT para Fastify.
+
 ## Objetivos do projeto
 
 - Criar o servidor com Fastify e Node.js para criação de Rotas
