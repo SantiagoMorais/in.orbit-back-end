@@ -2,11 +2,17 @@ import { db } from "@db/index";
 import { goalCompletions, goals } from "@db/schema";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
-import { between, count, eq, lte, sql } from "drizzle-orm";
+import { and, between, count, eq, lte, sql } from "drizzle-orm";
 
 dayjs.extend(weekOfYear);
 
-export const getWeekPendingGoals = async () => {
+interface GetWeekPendingGoalsRequest {
+  userId: string;
+}
+
+export const getWeekPendingGoals = async ({
+  userId,
+}: GetWeekPendingGoalsRequest) => {
   const firstDayOfTheWeek = dayjs().startOf("week").toDate();
   const lastDayOfTheWeek = dayjs().endOf("week").toDate();
 
@@ -20,7 +26,12 @@ export const getWeekPendingGoals = async () => {
         createdAt: goals.createdAt,
       })
       .from(goals)
-      .where(between(goals.createdAt, firstDayOfTheWeek, lastDayOfTheWeek))
+      .where(
+        and(
+          between(goals.createdAt, firstDayOfTheWeek, lastDayOfTheWeek),
+          eq(goals.userId, userId)
+        )
+      )
     // Avaliar as metas onde a data de criação está entre o primeiro e o último dia da semana
   );
 
@@ -31,8 +42,16 @@ export const getWeekPendingGoals = async () => {
         completionCount: count(goalCompletions.id).as("completionCount"),
       })
       .from(goalCompletions)
+      .innerJoin(goals, eq(goals.id, goalCompletions.goalId))
       .where(
-        between(goalCompletions.createdAt, firstDayOfTheWeek, lastDayOfTheWeek)
+        and(
+          between(
+            goalCompletions.createdAt,
+            firstDayOfTheWeek,
+            lastDayOfTheWeek
+          ),
+          eq(goals.userId, userId)
+        )
       )
       .groupBy(goalCompletions.goalId)
   );

@@ -5,9 +5,13 @@ import dayjs from "dayjs";
 
 interface ICreateGoalRequest {
   goalId: string;
+  userId: string;
 }
 
-export const createGoalCompletion = async ({ goalId }: ICreateGoalRequest) => {
+export const createGoalCompletion = async ({
+  goalId,
+  userId,
+}: ICreateGoalRequest) => {
   const firstDayOfTheWeek = dayjs().startOf("week").toDate();
   const lastDayOfTheWeek = dayjs().endOf("week").toDate();
 
@@ -19,14 +23,16 @@ export const createGoalCompletion = async ({ goalId }: ICreateGoalRequest) => {
         completionCount: count(goalCompletions.id).as("completionCount"),
       })
       .from(goalCompletions)
+      .innerJoin(goals, eq(goals.id, goalCompletions.goalId))
       .where(
         and(
           between(
             goalCompletions.createdAt,
             firstDayOfTheWeek,
-            lastDayOfTheWeek,
+            lastDayOfTheWeek
           ),
-          eq(goalCompletions.goalId, goalId)
+          eq(goalCompletions.goalId, goalId),
+          eq(goals.userId, userId)
         )
       )
       .groupBy(goalCompletions.goalId)
@@ -43,7 +49,7 @@ export const createGoalCompletion = async ({ goalId }: ICreateGoalRequest) => {
     })
     .from(goals)
     .leftJoin(goalCompletionCounts, eq(goalCompletionCounts.goalId, goals.id))
-    .where(eq(goals.id, goalId))
+    .where(and(eq(goals.id, goalId), eq(goals.userId, userId)))
     .limit(1);
 
   const { completionCount, desiredWeeklyFrequency } = result[0];
