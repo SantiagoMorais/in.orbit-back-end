@@ -2,6 +2,7 @@ import { db } from "@db/index";
 import { users } from "@db/schema";
 import { eq } from "drizzle-orm";
 import { env } from "env";
+import { authenticateUser } from "modules/auth";
 import {
   getAccessTokenFromCode,
   getUserFromAccessToken,
@@ -41,4 +42,8 @@ export const authenticateFromGithubCode = async ({
 
     userId = insertedUser.id;
   }
+
+  const token = await authenticateUser(userId);
+
+  return { token };
 };
