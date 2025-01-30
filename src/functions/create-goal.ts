@@ -3,6 +3,7 @@ import { db } from "../db";
 import { goals } from "../db/schema";
 
 interface ICreateGoalRequest {
+  userId: string;
   title: string;
   desiredWeeklyFrequency: number;
 }
@@ -10,6 +11,7 @@ interface ICreateGoalRequest {
 export const createGoal = async ({
   title,
   desiredWeeklyFrequency,
+  userId,
 }: ICreateGoalRequest) => {
   const goalAlreadyExist = await db
     .select()
@@ -24,6 +26,7 @@ export const createGoal = async ({
   const result = await db
     .insert(goals)
     .values({
+      userId,
       title,
       desiredWeeklyFrequency,
     })
