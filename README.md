@@ -45,6 +45,8 @@ API - Node | Fastify | Docker | PostgreSQL
 
 - [@fastify/swagger-ui](https://github.com/fastify/fastify-swagger-ui): Fornecer uma interface gráfica interativa (UI) para visualizar e testar a documentação da API gerada pelo fastify/swagger.
 
+- [jose](https://www.npmjs.com/package/jose): biblioteca JavaScript/TypeScript moderna e segura para trabalhar com JWTs (JSON Web Tokens), oferecendo funcionalidades como criação, assinatura, verificação e decodificação de tokens JWT de forma simples e eficiente.
+
 ## Objetivos do projeto
 
 - Criar o servidor com Fastify e Node.js para criação de Rotas
@@ -121,7 +123,7 @@ DATABASE_URL=postgresql://docker:docker@localhost:5432/inorbit
 
 - Inicialize o container:
   - `docker ps -a`: colete o ID do container criado
-  - `docker start <container_id>`: Execute o comando, substituindo o `<container_id>`, pelo ID copiado.  
+  - `docker start <container_id>`: Execute o comando, substituindo o `<container_id>`, pelo ID copiado.
 
 **5. Migração do esquema para o banco de dados**
 
@@ -130,7 +132,6 @@ DATABASE_URL=postgresql://docker:docker@localhost:5432/inorbit
 **6. Inicializar o servidor**
 
 - Execute o comando `npm run server:dev` para iniciar o servidor. Se o servidor não estiver rodando, as requisições de dados não serão feitas.
-
 
 ## Autor
 
