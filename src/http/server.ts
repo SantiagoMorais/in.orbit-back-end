@@ -6,7 +6,7 @@ import {
   ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import { createGoalRoute } from "./routes/create-goal";
-import { getPedingGoalsRoute } from "./routes/get-pending-goals";
+import { getPendingGoalsRoute } from "./routes/get-pending-goals";
 import { createCompletionRoute } from "./routes/create-completion";
 import { getWeekSummaryRoute } from "./routes/get-week-summary";
 import fastifyCors from "@fastify/cors";
@@ -15,6 +15,7 @@ import { deleteGoalCompletionRoute } from "./routes/delete-goal-completion";
 import { editGoalRoute } from "./routes/edit-goal";
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
+import { authenticateFromGithub } from "./routes/authenticate-from-github";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 const port: number = 3333;
@@ -42,12 +43,13 @@ app.register(fastifySwaggerUi, {
 
 // routes
 app.register(createGoalRoute);
-app.register(getPedingGoalsRoute);
+app.register(getPendingGoalsRoute);
 app.register(createCompletionRoute);
 app.register(getWeekSummaryRoute);
 app.register(deleteGoalRoute);
 app.register(deleteGoalCompletionRoute);
 app.register(editGoalRoute);
+app.register(authenticateFromGithub);
 
 app
   .listen({
